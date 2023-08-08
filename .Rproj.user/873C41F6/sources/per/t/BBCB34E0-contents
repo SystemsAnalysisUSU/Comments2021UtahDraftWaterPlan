@@ -1,0 +1,233 @@
+# UtahMunicipalIndustiralUse_InitAnalysis.r
+#
+# Initial analysis of Utah's Municipal and Industrial Water Use Data
+# 2018-2015
+#
+# Downloaded from https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data
+#
+# David E. Rosenberg
+# November 28, 2020
+# Utah State University
+# david.rosenberg@usu.edu
+
+rm(list = ls())  #Clear history
+
+# Load required libraies
+
+if (!require(tidyverse)) { 
+  install.packages("tidyverse", repos="http://cran.r-project.org") 
+  library(tidyverse) 
+}
+
+if (!require(readxl)) { 
+  install.packages("readxl", repos="http://cran.r-project.org") 
+  library(readxl) 
+}
+
+  
+if (!require(RColorBrewer)) { 
+  install.packages("RColorBrewer",repos="http://cran.r-project.org") 
+  library(RColorBrewer) # 
+}
+
+if (!require(dplyr)) { 
+  install.packages("dplyr",repos="http://cran.r-project.org") 
+  library(dplyr) # 
+}
+
+if (!require(expss)) { 
+  install.packages("expss",repos="http://cran.r-project.org") 
+  library(expss) # 
+}
+
+if (!require(reshape)) { 
+  install.packages("reshape", repos="http://cran.r-project.org") 
+  library(reshape) 
+}
+
+if (!require(reshape2)) { 
+  install.packages("reshape2", repos="http://cran.r-project.org") 
+  library(reshape2) 
+}
+
+
+if (!require(pracma)) { 
+  install.packages("pracma", repos="http://cran.r-project.org") 
+  library(pracma) 
+}
+
+if (!require(lubridate)) { 
+  install.packages("lubridate", repos="http://cran.r-project.org") 
+  library(lubridate) 
+}
+
+if (!require(directlabels)) { 
+  install.packages("directlabels", repo="http://cran.r-project.org")
+  library(directlabels) 
+}
+
+
+#if (!require(plyr)) { 
+#  install.packages("plyr", repo="http://cran.r-project.org")
+#  library(plyr) 
+#}
+
+if (!require(ggrepel)) { 
+  devtools::install_github("slowkow/ggrepel")
+  library(ggrepel) 
+}
+
+library(dygraphs)
+library(xts)          # To make the convertion data-frame / xts format
+library(tidyverse)
+library(lubridate)
+
+
+### 0. Definitions
+
+sFileBase <- "_Municipal_and_Industrial_Water_Use_Databases.csv"
+
+#Define the River locations to use
+dfFileYears <- data.frame(year = seq(2015,2018, by=1))
+dfFileYears$filename <- paste0(dfFileYears$year,sFileBase,"")
+
+### 1. Read IN the data files. Rbind so long list
+
+for(i in 1:nrow(dfFileYears)){
+ # i <- 1
+  
+  print(dfFileYears$year[i])
+  
+  # Read in the historical Powell data
+  dfTempFile <- read.csv(file=dfFileYears$filename[i], 
+                         header=TRUE, 
+                         
+                         stringsAsFactors=FALSE,
+                         sep=",")
+  
+  dfTempFile$year <- dfFileYears$year[i]                     #factor(dfLocations$rivermile[i], levels = dfLocations$rivermile)
+  #Rename the first column because they differ amoung files
+  cColNames <- colnames(dfTempFile)
+  cColNames[1] <- "FID"
+  colnames(dfTempFile) <- cColNames
+  
+  if(dfTempFile$year[i] == 2018) { #We need to adjust some other columns
+    cColNamesTemp <- cColNames
+    cColNamesTemp[c(12, 25,26,27,28)] <- c("TotPotaGPCD", "TotalSup", "WellsSup","SpringsSup","SurfaceSup")
+    
+    colnames(dfTempFile) <- cColNamesTemp
+    
+    #Add blank columns for these fields
+    cColsAdd <- c("ComSecGPCD", "IndSecGPCD", "InsSecGPCD", "InsSecoUse", "ResSecGPCD", "ResSecoUse", "ComSecoUse", "IndSecoUse", "IndSecoUse")
+    for (i in (1:length(cColsAdd))) {
+      dfTempFile[[cColsAdd[i]]] = 0
+      }
+    
+    }
+
+  if(i==1){ #first year, creat new data frame
+    dfAllYears <- dfTempFile
+  } else { #subsequent year, bind to existing records
+  
+    #bind the latest record to the existing records
+    dfAllYears <- rbind(dfAllYears,dfTempFile)
+    }
+
+}
+
+
+
+#Calculate population from per capita daily use and annual volume
+dGalPerAcreFeet <- 325851
+dfAllYears$Population <-  dfAllYears$TotalUse * dGalPerAcreFeet / (dfAllYears$TotalGPCD * 365)
+
+#Calculate average percapita use statewide
+
+dfAvgGPCD <- dfAllYears %>% group_by(year) %>% filter(is.na(Population) == FALSE, is.infinite(Population) == FALSE) %>% summarize(TotalUse = sum(TotalUse), 
+                                                         Population=sum(Population),
+                                                         AvgGPCD = sum(TotalUse)*dGalPerAcreFeet/(365*sum(Population)),
+                                                         UsePerPersonPerYear = sum(TotalUse)/sum(Population))
+
+
+#Grab color palettes
+palBlues <- brewer.pal(9, "Blues")
+palReds <- brewer.pal(9, "Reds")
+palBlueFunc <- colorRampPalette(c(palBlues[3],palBlues[9]))
+
+###### 2. Plot Total Use vs. Population. Sloped line for avg gpcd
+
+#Plot hourly - too much data
+library(scales)
+
+ggplot(dfAllYears %>% filter(year == 2018), aes(x = Population/100000, y= TotalUse/10000, color=BASIN)) +
+  geom_point(size=2) +
+  
+  #Sloped line for statewide average per capacita per day
+  geom_abline(aes(intercept = 0, slope = as.numeric(10*dfAvgGPCD %>% filter(year == 2018) %>% select(UsePerPersonPerYear))), color="black", size = 2, show.legend = NA) +
+
+  #scale_colour_manual(name="Lines", labels=c(paste(round(dfAvgGPCD %>% filter(year==2015) %>% select(AvgGPCD)), "gpcd")), values=c("Black")) +
+  facet_wrap(~BASIN) + 
+  #scale_color_manual(values = palBlues[3:8], breaks = c(194,149,76,61,30,0)) + #c(0,30,61,76,149,194)) +
+  #scale_x_continuous(labels = numeric() ) +
+  labs(x="Population (100,000)", y="Total Use (10,000 acre-feet per year)", color = "County") +
+  theme(text = element_text(size=20), legend.title=element_blank(), legend.text=element_text(size=18),
+        legend.key = element_blank())
+
+ggsave("UseVsPopulation.png", width=9, height = 6.5, units="in")
+
+#Histogram of per capita daily use by provider
+
+ggplot(dfAllYears, aes(x=TotalGPCD, color = BASIN, fill = BASIN)) +
+  geom_histogram(binwidth = 50) +
+  #Plot vertial line for average gpcd
+  geom_vline(xintercept = dfAvgGPCD$AvgGPCD, color="black", size = 2) +
+  
+  geom_text(data=dfAvgGPCD %>% filter(year==2015), aes(x=AvgGPCD+30,y=25), label = "Utah average", size=6, hjust=0) +
+  
+  scale_x_continuous(limits = c(0,3000)) +
+  facet_wrap(~year) +
+  
+  labs(x="Total Gallons per Person per Day", y="Number of Providers") +
+  theme(text = element_text(size=20), legend.title=element_blank(), legend.text=element_text(size=18),
+        legend.key = element_blank())
+
+
+#Histogram of daily per caita water use by water volume
+#Create the bins
+cGPCDBins <- seq(0,max(dfAllYears$TotalGPCD), by=50)
+#Assign each GPCD value to a bin
+dfAllYears$TotGPCDBin <- cut(dfAllYears$TotalGPCD, breaks = cGPCDBins, labels = cGPCDBins[1:(length(cGPCDBins)-1)])
+#Sum in each group
+dfGCPDByVolume <- dfAllYears %>% group_by(TotGPCDBin, year) %>% summarize(TotalUse = sum(TotalUse))
+
+ggplot(dfGCPDByVolume) +
+  geom_bar(aes(x= cGPCDBins[as.numeric(TotGPCDBin)], y=TotalUse/10000), fill="blue", color="blue", stat="identity") +
+  #Plot vertial line for average gpcd
+  geom_vline(xintercept = dfAvgGPCD$AvgGPCD, color="black", size = 2) +
+  
+  geom_text(data=dfAvgGPCD %>% filter(year==2015), aes(x=AvgGPCD+30,y=25), label = "Utah average", size=6, hjust=0) +
+  
+  scale_x_continuous(limits=c(0,3000)) +
+  facet_wrap(~year) +
+  
+  labs(x="Total Gallons per Person per Day", y="Total Use\n(10,000 acre-feet per year)") +
+  theme(text = element_text(size=20), legend.title=element_blank(), legend.text=element_text(size=18),
+        legend.key = element_blank())
+
+#Cumulative sum
+ggplot(dfGCPDByVolume) +
+  geom_line(aes(x= cGPCDBins[as.numeric(TotGPCDBin)], y=cumsum(TotalUse)/10000, color=as.factor(year)), size =1.5) +
+  #Plot vertial line for average gpcd
+  geom_vline(xintercept = dfAvgGPCD$AvgGPCD, color="black", size = 2) +
+  #Label the vertical line
+  geom_text(data=dfAvgGPCD %>% filter(year==2015), aes(x=AvgGPCD+20,y=50), label = "Utah average", size=8, hjust=0) +
+  
+  scale_x_continuous(limits=c(0,3000)) +
+  scale_y_continuous(sec.axis = sec_axis(~ . / (max(cumsum(dfAvgGPCD$TotalUse))/100)))+ #, name="Cumulative Use\n(Percent of Total)") +
+  #facet_wrap(~year) +
+  
+  labs(x="Total Gallons per Person per Day", y="Total Use\n(10,000 acre-feet per year)") +
+  theme(text = element_text(size=20), legend.title=element_blank(), legend.text=element_text(size=18),
+        legend.key = element_blank())
+
+

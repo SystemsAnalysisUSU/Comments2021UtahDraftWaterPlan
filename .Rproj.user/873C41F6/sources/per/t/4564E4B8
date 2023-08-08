@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1606600278430.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4564E4B8",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1606600278430,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "858F665A",
+        "caption" : "dfAllYears",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dfAllYears&cache_key=858F665A",
+        "displayedObservations" : "1871",
+        "environment" : "",
+        "object" : "dfAllYears",
+        "preview" : "0",
+        "totalObservations" : "1871",
+        "variables" : "41"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

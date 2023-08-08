@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1606599662887.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "308324898",
+    "id" : "BBCB34E0",
+    "lastKnownWriteTime" : 1607452932,
+    "last_content_update" : 1607452932180,
+    "path" : "C:/Rosenberg/Work/USU/Research/Proposals/2020/UDWR-CompareUse/DataAnalysis/UtahMunicipalIndustrialUse_InitAnalysis.R",
+    "project_path" : "UtahMunicipalIndustrialUse_InitAnalysis.R",
+    "properties" : {
+        "cursorPosition" : "5,18",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
