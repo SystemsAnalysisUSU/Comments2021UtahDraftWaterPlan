@@ -27,6 +27,10 @@ Utah State University
 
 ## Explanation of Contents
 1. **2015_Municipal_and_Industrial_Water_Use_Databases.csv** - Year 2015 data. Downloaded from Utah Division of Water Resources data repository at https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data.
+1. **2016_Municipal_and_Industrial_Water_Use_Databases.csv** - Year 2016 data. Downloaded from Utah Division of Water Resources data repository at https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data.
+1. **2017_Municipal_and_Industrial_Water_Use_Databases.csv** - Year 2017 data. Downloaded from Utah Division of Water Resources data repository at https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data.
+1. **2018_Municipal_and_Industrial_Water_Use_Databases.csv** - Year 2018 data. Downloaded from Utah Division of Water Resources data repository at https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data.
+1. **2019_Municipal_and_Industrial_Water_Use_Databases.csv** - Year 2019 data. Downloaded from Utah Division of Water Resources data repository at https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data.
 
 
 
