@@ -1,6 +1,6 @@
 # Comments on 2021 Utah State Water Plan Draft 
 
-The data, code, and directions in this repository support the analysis and Figure 1 generated in the Utah and Western Water Blog post [Nine strengths and 7 Suggestions to improve the 2021 draft Utah water resources plan](https://utahandwesternwater.wordpress.com/2021/11/15/nine-strengths-and-7-suggestions-to-improve-the-2021-draft-utah-water-resources-plan/).
+The data, code, and directions in this repository support the analysis and Figure 1 generated in the Utah and Western Water Blog post "[Nine strengths and 7 Suggestions to improve the 2021 draft Utah water resources plan](https://utahandwesternwater.wordpress.com/2021/11/15/nine-strengths-and-7-suggestions-to-improve-the-2021-draft-utah-water-resources-plan/)."
 
 ## Directions to View Results
 1. Open the file **UtahMunicipalIndustrialData-WaterPlanComment.pdf**. Within contain description of the data, analysis, and results.
@@ -26,6 +26,7 @@ August 8, 2023
 Utah State University
 
 ## Explanation of Contents
+1. **2015_Municipal_and_Industrial_Water_Use_Databases.csv** - Year 2015 data. Downloaded from Utah Division of Water Resources data repository at https://dwre-utahdnr.opendata.arcgis.com/pages/municipal-and-industrial-data.
 
 
 
