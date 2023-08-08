@@ -5,9 +5,6 @@ The data, code, and directions in this repository support the analysis and Figur
 ## Directions to View Results
 1. Open the file **UtahMunicipalIndustrialData-WaterPlanComment.pdf**. Within contain description of the data, analysis, and results.
 
-## 
-
-To reproduce results
 ## Directions to Reproduce Results
 1. Download this repository to your local machine (towards top of webpage, click green **Code** button => **Download Zip**). Unzip contents.
 1. Download and install R and RStudio (see Requirements).
@@ -35,3 +32,6 @@ All modified or derivative products must use the same BSD-3-Clause license. This
 ## Requested Citation
 David E. Rosenberg (2021). "[Nine strengths and 7 Suggestions to improve the 2021 draft Utah water resources plan](https://utahandwesternwater.wordpress.com/2021/11/15/nine-strengths-and-7-suggestions-to-improve-the-2021-draft-utah-water-resources-plan/).
  Utah State University. Logan, Utah. https://utahandwesternwater.wordpress.com/2021/11/15/nine-strengths-and-7-suggestions-to-improve-the-2021-draft-utah-water-resources-plan/
+ 
+## Link to code repository
+https://github.com/SystemsAnalysisUSU/Comments2021UtahDraftWaterPlan.
