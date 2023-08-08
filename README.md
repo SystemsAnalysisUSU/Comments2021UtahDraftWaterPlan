@@ -5,6 +5,10 @@ The data, code, and directions in this repository support the analysis and Figur
 ## Directions to View Results
 1. Open the file **UtahMunicipalIndustrialData-WaterPlanComment.pdf**. Within contain description of the data, analysis, and results.
 
+## Requirements
+* R version 4.1.1. Download from https://cran.r-project.org/.
+* R Studio 1.1.456. Download from https://www.rstudio.com/.
+
 ## Directions to Reproduce Results
 1. Download this repository to your local machine (towards top of webpage, click green **Code** button => **Download Zip**). Unzip contents.
 1. Download and install R and RStudio (see Requirements).
